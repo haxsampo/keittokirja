@@ -6,11 +6,7 @@ class Resepti(db.Model):
     date_modified = db.Column(db.DateTime, default=db.func.current_timestamp(),
     onupdate=db.func.current_timestamp())
 
-    nimi = db.Column(db.String(144), nullable=False)
-    valmistusaika = db.Column(db.Integer, nullable=False)
-    hinta = db.Column(db.Integer, nullable=False)
+    name = db.Column(db.String(144), nullable=False)
 
-    def __init__(self, nimi, valmistusaika, hinta):
-        self.nimi = nimi
-        self.valmistusaika = valmistusaika
-        self.hinta = hinta
+    def __init__(self, name):
+        self.name = name
