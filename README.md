@@ -1,5 +1,7 @@
 # Keittokirja
 
+HEROKUAPP:[Herokuapp] (http://pomsa-keittokirja.herokuapp.com/)
+
 ##Kuvaus
 Keittokirja käsittelee reseptejä eli valmistusohjeita, sekä ainesosalistoja. Näitä pitäisi siis pystyä tallettamaan keittokirjaan, ja hakemaan niitä keittokirjasta erilaisilla tavoilla. Esimerkkejä toivottavasti hakuoptioista: alle 45min vaativat; reseptit joissa on perunaa sekä kermaviiliä; reseptit joissa on joko perunaa tai kermaviiliä; reseptit joissa on perunaa tai kermaviiliä, mutta ei paprikaa.
 
