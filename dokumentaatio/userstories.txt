@@ -1,0 +1,12 @@
+Foreword: the aim of this app is to 1. fulfil the requirements of tsoha20 course 2. provide the developer with a electrical cookbook that he can use after the course. Thus the inteded user is the developer. Thirdly the aim is to allow a test access for anyone else. 
+
+Userstories
+As a user, I want to be able to save my recipes so that i can check them while I'm in a store.
+
+I want to be able to search my recipes in such way that if I have specific ingredients in my fridge, I'll be able look for recipes which have those specific ingredients.
+
+I want to be able to look for recipes which have low time requirements so that if I'm in a hurry I can easily look for options.
+
+I want to be able to look for recipes which are fairly easy so that if my non-cooking friends ask for easy recipes I can easily provide them.
+
+I want to be able to pull information directly from websites so that the information is saved in a more or less useful fashion, so that if I see an interesting recipe I can easily save it for later, without checking my browser for saved interesting recipes.
