@@ -7,6 +7,8 @@ class Resepti(db.Model):
     onupdate=db.func.current_timestamp())
 
     name = db.Column(db.String(144), nullable=False)
+    cooktime = db.Column(db.String(144), nullable=False)
 
-    def __init__(self, name):
+    def __init__(self, name, cooktime):
         self.name = name
+        self.cooktime = cooktime

@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+
+{% block body %}
+    <table>
+        <tr>
+            <th>Resepti</th>
+        </tr>
+        {% for resepti in reseptit %}
+        <tr>
+            <td>{{ resepti.name }}</td>
+            <td>{{ resepti.cooktime }}</td>
+            <td>
+                <form method="POST" action="{{ url_for('reseptit_set_cooktime', resepti_id=resepti.id) }}">
+                    <input type="text" name="cooktime"/>
+                    <input type="submit" value="Change cooktime"/>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
