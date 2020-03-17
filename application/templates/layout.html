@@ -6,6 +6,14 @@
     </head>
 
     <body>
+        <ul>
+            <li><a href="{{ url_for('reseptit_index') }}">List recipes</a></li>
+            <li><a href="{{ url_for('reseptit_form') }}">Add new</a></li>
+        </ul>
+    </body>
+
+
+    <body>
         {% block body %}
         <p>
             sisaltoae
