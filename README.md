@@ -12,5 +12,6 @@ Myös erilaisten käyttäjien lisääminen olisi hyväksi. Esimerkiksi vain sis�
 
 
 ###Omat muistiinpanot
-tee cooktimeen fronttitsekki siten että se formaatti on uniformi esim x h y min tms
+tee cooktimen formatointi siten että arviot aina minuutteina sisään, ulos listauksessa voi olla muuten
 reseptin hinta-arvion vois muodostaa raaka-aineitten hinnan perusteella joita vois sit tallentaa mielellään jossain spesifissä muodossa tai tehdä joku konversointipala väliin
+lisää 1. palikka joka db:n poiston jälkeen käynnistäessä lisää adminuserin ja vierailijan 2. lisää teksti ja salasana vierailijalle 3. lisää ajoitettu, esim 24h välein tapahtuva vierailijoitten tekemien muutosten purgeaminen
