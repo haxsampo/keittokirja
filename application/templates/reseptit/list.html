@@ -8,6 +8,12 @@
         {% for resepti in reseptit %}
         <tr>
             <td>{{ resepti.name }}</td>
+                <td>
+                    <form method="POST" action="{{ url_for('reseptit_set_cooktime', resepti_id=resepti.id) }}">
+                        <input type="text" name="name">
+                        <input type="submit" value="Change name"/>
+                    </form>
+                </td>
             <td>{{ resepti.cooktime }}</td>
             <td>
                 <form method="POST" action="{{ url_for('reseptit_set_cooktime', resepti_id=resepti.id) }}">

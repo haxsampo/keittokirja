@@ -17,8 +17,16 @@ def reseptit_form():
 @app.route("/reseptit/<resepti_id>/", methods=["POST"])
 @login_required
 def reseptit_set_cooktime(resepti_id):
-    r = Resepti.query.get(resepti_id)
-    r.cooktime = request.form.get("cooktime")
+    r = Resepti.query.get(resepti_id)   
+
+    newCooktime = request.form.get("cooktime")
+    if newCooktime:
+        r.cooktime = newCooktime
+        
+    newName = request.form.get("name")
+    if newName:
+        r.name = newName
+    
     db.session().commit()
     
     return redirect(url_for("reseptit_index"))
