@@ -17,6 +17,12 @@ def reseptit_form():
 @app.route("/reseptit/<resepti_id>/", methods=["POST"])
 @login_required
 def reseptit_set_cooktime(resepti_id):
+    form = TaskForm(request.form)
+
+    if not form.validate():
+        print("not validated")
+        return redirect(url_for("reseptit_index"))
+
     r = Resepti.query.get(resepti_id)   
 
     newCooktime = request.form.get("cooktime")
@@ -28,6 +34,7 @@ def reseptit_set_cooktime(resepti_id):
         r.name = newName
     
     db.session().commit()
+    print("session committed")
     
     return redirect(url_for("reseptit_index"))
 
