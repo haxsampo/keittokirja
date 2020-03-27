@@ -7,6 +7,6 @@ I want to be able to search my recipes in such way that if I have specific ingre
 
 I want to be able to look for recipes which have low time requirements so that if I'm in a hurry I can easily look for options.
 
-I want to be able to look for recipes which are fairly easy so that if my non-cooking friends ask for easy recipes I can easily provide them.
+I want to be able to look for recipes which are fairly easy to cook so that if my non-cooking friends ask for easy recipes I can easily provide them.
 
 I want to be able to pull information directly from websites so that the information is saved in a more or less useful fashion, so that if I see an interesting recipe I can easily save it for later, without checking my browser for saved interesting recipes.
