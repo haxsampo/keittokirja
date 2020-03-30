@@ -3,6 +3,7 @@ from flask_login import login_required, current_user
 
 from application import app, db
 from application.reseptit.forms import ReseptiForm
+from application.reseptit.forms import SearchForm
 from application.reseptit.models import Resepti
 
 @app.route("/reseptit", methods=["GET"])
@@ -14,6 +15,20 @@ def reseptit_index():
 def reseptit_form():
     return render_template("reseptit/new.html", form = ReseptiForm())
 
+@app.route("/search/")
+@login_required
+def reseptit_search():
+    return render_template("reseptit/search.html", form = SearchForm())
+
+@app.route("/search/", methods=["POST"])
+@login_required
+def reseptit_search_with_stuff():
+    form = SearchForm()
+    reseptit = Resepti.find_reseptit_with_arg_ainesosa(request.form.get("search"))
+    return render_template("reseptit/search.html", form = form, reseptit = reseptit)
+
+
+
 @app.route("/reseptit/<resepti_id>/", methods=["POST"])
 @login_required
 def reseptit_set_cooktime(resepti_id):
@@ -22,7 +37,6 @@ def reseptit_set_cooktime(resepti_id):
     r = Resepti.query.get(resepti_id)   
 
     newCooktime = request.form.get("cooktime")
-    print(newCooktime)
     if newCooktime:
         r.cooktime = newCooktime
     else:

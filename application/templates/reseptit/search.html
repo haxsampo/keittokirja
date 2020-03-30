@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<form method="POST" action="{{ url_for('reseptit_search') }}">
+    <table>
+        <tr>
+            <td>
+                {{ form.search.label }}
+            </td>
+            <td>
+                {{ form.search }}
+            </td>
+            <td>
+                <ul>
+                    {% for error in form.search.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="submit" value="Search"/>
+            </td>
+        </tr>
+
+        {% if reseptit is defined %}
+                {% for resepti in reseptit %}
+            <tr>
+                <td>{{ resepti.name }}</td> 
+            </tr>
+            {% endfor %}
+        {% endif %}
+    </table>
+</form>
+{% endblock %}

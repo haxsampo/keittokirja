@@ -145,3 +145,4 @@ cython_debug/
 media
 static
 keittokirja.db
+.vscode

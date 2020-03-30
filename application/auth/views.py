@@ -1,6 +1,7 @@
 from flask import render_template, request, redirect, url_for
 from flask_login import login_user, logout_user
 
+from application.reseptit.models import Resepti
 from application import app
 from application.auth.models import User
 from application.auth.forms import LoginForm

@@ -7,3 +7,9 @@ class ReseptiForm(FlaskForm):
 
     class Meta:
         csrf = False
+
+class SearchForm(FlaskForm):
+    search = StringField("Search ainesosa")
+    
+    class Meta:
+        csrf = False

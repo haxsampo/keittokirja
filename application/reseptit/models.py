@@ -2,6 +2,7 @@ from application import db
 from application.models import Base
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Table
+from sqlalchemy.sql import text
 
 #Ainesosa-Resepti assosiaatiotaulu
 resepti_ainesosa = db.Table('resepti_ainesosa',
@@ -24,6 +25,20 @@ class Resepti(Base):
         self.name = name
         self.cooktime = cooktime
 
+    @staticmethod
+    def find_reseptit_with_arg_ainesosa(haettava):
+        stmt = text("SELECT r.name, r.id FROM resepti r, ainesosa a, resepti_ainesosa i "
+                    "WHERE r.id = i.resepti_id AND a.id = i.ainesosa_id AND a.name = '" +
+                    haettava +"';" 
+                    )
+        res = db.engine.execute(stmt)
+        print(res)
+        response = []
+        for row in res:
+            response.append({"name":row[0], "id":row[1]})
+        
+        return response
+
 
 
 class Ainesosa(Base):
@@ -34,7 +49,6 @@ class Ainesosa(Base):
 
     def __init__(self, name):
         self.name = name
-
 
 
 
