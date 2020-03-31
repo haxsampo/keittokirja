@@ -6,6 +6,7 @@ from application.reseptit.forms import ReseptiForm
 from application.reseptit.forms import SearchForm
 from application.reseptit.models import Resepti
 from application.misc.sqlhelp import requestContainer
+from application.reseptit.models import Ainesosa
 
 @app.route("/reseptit", methods=["GET"])
 def reseptit_index():
@@ -72,9 +73,13 @@ def reseptit_create():
 
     r = Resepti(form.name.data, form.cooktime.data)
     r.account_id = current_user.id
-
+    a = Ainesosa(form.ainesosa.data)
+    db.session().add(a)
+    r.ainesosa.append(a)
 
     db.session().add(r)
     db.session().commit()
+
+
 
     return redirect(url_for("reseptit_index"))

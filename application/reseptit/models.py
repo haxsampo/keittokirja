@@ -29,10 +29,9 @@ class Resepti(Base):
     def find_reseptit_with_arg_ainesosa(haettava):
         stmt = text("SELECT r.name, r.id FROM resepti r, ainesosa a, resepti_ainesosa i "
                     "WHERE r.id = i.resepti_id AND a.id = i.ainesosa_id AND a.name = '" +
-                    haettava +"';" 
-                    )
+                    haettava +"';" )
+
         res = db.engine.execute(stmt)
-        print(res)
         response = []
         for row in res:
             response.append({"name":row[0], "id":row[1]})
