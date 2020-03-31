@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+
+{% block body %}
+    <table>
+        <tr>
+            <td>{{ resepti.name }}</td>
+            <td>{{ resepti.cooktime }}</td>
+            <p>Ainesosat</p>
+            {% for ainesosa in ainesosat %}
+            <td>{{ ainesosa.name }}</td>
+            {% endfor %}
+        </tr>
+    </table>
+{% endblock %}
