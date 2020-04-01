@@ -14,3 +14,11 @@ class requestContainer():
             response.append({"name":row[0], "id":row[1]})
         
         return response
+
+class startupInsertionContainer():
+    @staticmethod
+    def insert_test_accounts():
+        stmt = text("INSERT INTO account (username, name, password) "
+                    "VALUES ('', '', '');")
+
+        db.engine.execute(stmt)

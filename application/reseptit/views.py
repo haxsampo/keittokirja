@@ -74,12 +74,19 @@ def reseptit_create():
     r = Resepti(form.name.data, form.cooktime.data)
     r.account_id = current_user.id
     a = Ainesosa(form.ainesosa.data)
-    db.session().add(a)
-    r.ainesosa.append(a)
+
+    #tsekataan onko ainesosa jo ainesosa-taulussa
+    ainesosa = Ainesosa.query.filter_by(name=a.name).first()
+
+    if not ainesosa:
+        db.session().add(a)
+        r.ainesosa.append(a) 
 
     db.session().add(r)
     db.session().commit()
 
-
+    if ainesosa: #on taulussa
+        print("#ontaulussa")
+        Ainesosa.add_ref_to_resepti_ainesosa(r.id, ainesosa.id)
 
     return redirect(url_for("reseptit_index"))

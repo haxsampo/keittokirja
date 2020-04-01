@@ -41,13 +41,23 @@ class Resepti(Base):
 
 
 class Ainesosa(Base):
-    name = db.Column(db.String(144), nullable=False) #lisää tälle unique=True kun on tunkattu
+    name = db.Column(db.String(144), nullable=False)
     resepti = db.relationship('Resepti', 
                             secondary=resepti_ainesosa, 
                             back_populates='ainesosa')
 
     def __init__(self, name):
         self.name = name
+
+    @staticmethod
+    def add_ref_to_resepti_ainesosa(resepti_id, ainesosa_id):
+        resid = str(resepti_id)
+        ainid = str(ainesosa_id)
+
+        stmt = text("INSERT INTO resepti_ainesosa (resepti_id, ainesosa_id) "
+                    "VALUES ("+resid+", "+ainid+");")
+
+        db.engine.execute(stmt)
 
 
 

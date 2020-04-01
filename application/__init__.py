@@ -20,6 +20,8 @@ from application.reseptit import views
 from application.auth import models
 from application.auth import views
 
+from application.misc.sqlhelp import startupInsertionContainer
+
 #user authentication
 from application.auth.models import User
 from os import urandom
@@ -38,5 +40,8 @@ def load_user(user_id):
 
 try:
     db.create_all()
+    startupInsertionContainer.insert_test_accounts()
 except:
     pass
+
+    
