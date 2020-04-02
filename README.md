@@ -2,6 +2,7 @@
 
 [Herokuapp](http://pomsa-keittokirja.herokuapp.com/)
 Herokussa toimivat tunnarit user: user password: pass
+Githubissa olevaan versioon toimii tyhjät kentät
 
 [Userstories](https://github.com/haxsampo/keittokirja/blob/master/dokumentaatio/userstories.txt)
 

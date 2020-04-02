@@ -4,6 +4,7 @@ from flask_login import login_required, current_user
 from application import app, db
 from application.reseptit.forms import ReseptiForm
 from application.reseptit.forms import SearchForm
+from application.reseptit.forms import AineetList
 from application.reseptit.models import Resepti
 from application.misc.sqlhelp import requestContainer
 from application.reseptit.models import Ainesosa
@@ -15,7 +16,7 @@ def reseptit_index():
 @app.route("/reseptit/new/")
 @login_required
 def reseptit_form():
-    return render_template("reseptit/new.html", form = ReseptiForm())
+    return render_template("reseptit/new.html", form = ReseptiForm(), aineet = AineetList())
 
 @app.route("/search/")
 @login_required
@@ -67,26 +68,31 @@ def reseptit_set_cooktime(resepti_id):
 @login_required
 def reseptit_create():
     form = ReseptiForm(request.form)
+    aineForm = AineetList()
 
     if not form.validate():
         return render_template("reseptit/new.html", form = form)
 
     r = Resepti(form.name.data, form.cooktime.data)
     r.account_id = current_user.id
-    a = Ainesosa(form.ainesosa.data)
 
-    #tsekataan onko ainesosa jo ainesosa-taulussa
-    ainesosa = Ainesosa.query.filter_by(name=a.name).first()
-
-    if not ainesosa:
-        db.session().add(a)
-        r.ainesosa.append(a) 
+    print(aineForm.aineet.data)
+    #Loop through Fieldlist of AinesosaForms
+    alreadyInDb = []
+    for aineEl in aineForm.aineet.data:
+        aines = Ainesosa.query.filter_by(name=aineEl['name']).first()
+        if not aines: #name of current aineEl doesn't exist in db
+            a = Ainesosa(aineEl['name'])
+            db.session().add(a)
+            r.ainesosa.append(a)
+        else: #aines exists in db
+            alreadyInDb.append(aines)
 
     db.session().add(r)
     db.session().commit()
 
-    if ainesosa: #on taulussa
-        print("#ontaulussa")
-        Ainesosa.add_ref_to_resepti_ainesosa(r.id, ainesosa.id)
+    #Add references to resepti_ainesosa table for prexisting ones
+    for aineEl in alreadyInDb:
+        Ainesosa.add_ref_to_resepti_ainesosa(r.id, aineEl.id)
 
     return redirect(url_for("reseptit_index"))

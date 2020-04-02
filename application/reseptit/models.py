@@ -7,7 +7,7 @@ from sqlalchemy.sql import text
 #Ainesosa-Resepti assosiaatiotaulu
 resepti_ainesosa = db.Table('resepti_ainesosa',
                     db.Column('resepti_id', db.Integer, db.ForeignKey('resepti.id')),
-                    db.Column('ainesosa_id', db.Integer, db.ForeignKey('ainesosa.id'))
+                    db.Column('ainesosa_id', db.Integer, db.ForeignKey('ainesosa.id')),
                     )
 
 class Resepti(Base):

@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<form method="POST" action="{{ url_for('reseptit_create') }}">
+<form method="POST" action="{{ url_for('reseptit_create') }}">   
     <table>
         <tr>
             <td>
@@ -34,19 +34,13 @@
             </td>
         </tr>
         <tr>
-            <td>
-                {{ form.ainesosa.label }}
-            </td>
-            <td>
-                {{ form.ainesosa }}
-            </td>
-            <td>
-                <ul>
-                    {% for error in form.ainesosa.errors %}
-                    <li>{{ error }}</li>
+            <div class="form-group input-group">
+                {% for el in aineet %}
+                    {% for field in el %}
+                        {{ field() }}
                     {% endfor %}
-                </ul>
-            </td>
+                {% endfor %}
+            </div>            
         </tr>
         <tr>
             <td colspan="2">
