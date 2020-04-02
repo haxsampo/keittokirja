@@ -5,21 +5,40 @@ from sqlalchemy import Table
 from sqlalchemy.sql import text
 
 #Ainesosa-Resepti assosiaatiotaulu
-resepti_ainesosa = db.Table('resepti_ainesosa',
-                    db.Column('resepti_id', db.Integer, db.ForeignKey('resepti.id')),
-                    db.Column('ainesosa_id', db.Integer, db.ForeignKey('ainesosa.id')),
-                    )
+#resepti_ainesosa = db.Table('resepti_ainesosa',
+#                    db.Column('resepti_id', db.Integer, db.ForeignKey('resepti.id')),
+#                    db.Column('ainesosa_id', db.Integer, db.ForeignKey('ainesosa.id')),
+#                    db.Column('amount', db.String(32))
+#                    )
+
+class Resepti_ainesosa(db.Model):
+    resepti_id = db.Column(db.Integer, db.ForeignKey('resepti.id'), primary_key=True)
+    ainesosa_id = db.Column(db.Integer, db.ForeignKey('ainesosa.id'), primary_key=True)
+    amount = db.Column(db.String(32))
+    ainesosa = db.relationship("Ainesosa", back_populates="resepti")
+    resepti = db.relationship("Resepti", back_populates="ainesosa")
+
+    #def __init__(self, amount):
+    #    self.amount = amount
+
+    @staticmethod
+    def add_ref_to_resepti_ainesosa(resepti_id, ainesosa_id, amount):
+        resid = str(resepti_id)
+        ainid = str(ainesosa_id)
+        amountStr = str(amount)
+
+        stmt = text("INSERT INTO resepti_ainesosa (resepti_id, ainesosa_id, amount) "
+                    "VALUES ("+resid+", "+ainid+", "+amountStr+");")
+
+        db.engine.execute(stmt)
+
 
 class Resepti(Base):
-
     name = db.Column(db.String(144), nullable=False)
     cooktime = db.Column(db.Integer, nullable=False)
-
     account_id = db.Column(db.Integer, db.ForeignKey('account.id'), nullable=False)
 
-    ainesosa = db.relationship('Ainesosa', 
-                            secondary=resepti_ainesosa, 
-                            back_populates='resepti')
+    ainesosa = db.relationship('Resepti_ainesosa', back_populates='resepti')
 
     def __init__(self, name, cooktime):
         self.name = name
@@ -42,22 +61,12 @@ class Resepti(Base):
 
 class Ainesosa(Base):
     name = db.Column(db.String(144), nullable=False)
-    resepti = db.relationship('Resepti', 
-                            secondary=resepti_ainesosa, 
-                            back_populates='ainesosa')
+    resepti = db.relationship('Resepti_ainesosa', back_populates='ainesosa')
 
     def __init__(self, name):
         self.name = name
 
-    @staticmethod
-    def add_ref_to_resepti_ainesosa(resepti_id, ainesosa_id):
-        resid = str(resepti_id)
-        ainid = str(ainesosa_id)
-
-        stmt = text("INSERT INTO resepti_ainesosa (resepti_id, ainesosa_id) "
-                    "VALUES ("+resid+", "+ainid+");")
-
-        db.engine.execute(stmt)
+    
 
 
 

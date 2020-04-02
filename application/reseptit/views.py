@@ -8,6 +8,7 @@ from application.reseptit.forms import AineetList
 from application.reseptit.models import Resepti
 from application.misc.sqlhelp import requestContainer
 from application.reseptit.models import Ainesosa
+from application.reseptit.models import Resepti_ainesosa
 
 @app.route("/reseptit", methods=["GET"])
 def reseptit_index():
@@ -73,26 +74,33 @@ def reseptit_create():
     if not form.validate():
         return render_template("reseptit/new.html", form = form)
 
+    #Lets remove empty forms from further processing
+    aineListWithoutEmpties = []
+    for aineEl in aineForm.aineet.data:
+        elName = aineEl['name']
+        if not elName == "":
+            aineListWithoutEmpties.append({'name':aineEl['name'], 'amount':aineEl['amount'] })
+        
+
     r = Resepti(form.name.data, form.cooktime.data)
     r.account_id = current_user.id
 
-    print(aineForm.aineet.data)
-    #Loop through Fieldlist of AinesosaForms
     alreadyInDb = []
-    for aineEl in aineForm.aineet.data:
+    for aineEl in aineListWithoutEmpties:
         aines = Ainesosa.query.filter_by(name=aineEl['name']).first()
         if not aines: #name of current aineEl doesn't exist in db
             a = Ainesosa(aineEl['name'])
-            db.session().add(a)
-            r.ainesosa.append(a)
-        else: #aines exists in db
-            alreadyInDb.append(aines)
+            r_a = Resepti_ainesosa(amount=aineEl['amount'])
+            r_a.ainesosa = a
+            r.ainesosa.append(r_a)
+        else: #name of ainesEl already exists in db -> save the queried object for id and amount from ainesform
+            alreadyInDb.append({'ainesKey':aines, 'amount':aineEl['amount']})
 
     db.session().add(r)
     db.session().commit()
 
     #Add references to resepti_ainesosa table for prexisting ones
-    for aineEl in alreadyInDb:
-        Ainesosa.add_ref_to_resepti_ainesosa(r.id, aineEl.id)
+    for ainesEl in alreadyInDb:
+       Resepti_ainesosa.add_ref_to_resepti_ainesosa(r.id, ainesEl['ainesKey'].id, aineEl['amount'])
 
     return redirect(url_for("reseptit_index"))
