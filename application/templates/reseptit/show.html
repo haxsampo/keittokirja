@@ -3,12 +3,18 @@
 {% block body %}
     <table>
         <tr>
-            <td>{{ resepti.name }}</td>
-            <td>{{ resepti.cooktime }}</td>
-            <p>Ainesosat</p>
+            <h2>{{ resepti.name }}</h2>
+        </tr>    
+        <tr>
+            <td>Keittoaika: {{ resepti.cooktime }}</td>
+        </tr>
+        <tr>
+            <h4>Ainesosat</h4>
             {% for ainesosa in ainesosat %}
-            <td>{{ ainesosa.name }}</td>
+            <p>{{ ainesosa.name }} määrä: {{ ainesosa.amount }}</p>
+
             {% endfor %}
         </tr>
+    
     </table>
 {% endblock %}

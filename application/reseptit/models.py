@@ -28,7 +28,7 @@ class Resepti_ainesosa(db.Model):
         amountStr = str(amount)
 
         stmt = text("INSERT INTO resepti_ainesosa (resepti_id, ainesosa_id, amount) "
-                    "VALUES ("+resid+", "+ainid+", "+amountStr+");")
+                    "VALUES (:resid, :ainid, :amountStr);").params(resid=resid, ainid=ainid, amountStr=amountStr)
 
         db.engine.execute(stmt)
 
@@ -47,8 +47,7 @@ class Resepti(Base):
     @staticmethod
     def find_reseptit_with_arg_ainesosa(haettava):
         stmt = text("SELECT r.name, r.id FROM resepti r, ainesosa a, resepti_ainesosa i "
-                    "WHERE r.id = i.resepti_id AND a.id = i.ainesosa_id AND a.name = '" +
-                    haettava +"';" )
+                    "WHERE r.id = i.resepti_id AND a.id = i.ainesosa_id AND a.name = :haettava;" ).params(haettava=haettava)
 
         res = db.engine.execute(stmt)
         response = []
@@ -66,6 +65,17 @@ class Ainesosa(Base):
     def __init__(self, name):
         self.name = name
 
+    @staticmethod
+    def find_ainesosat_for_recipe(recipe_id):
+        stmt = text("SELECT a.name, i.amount FROM resepti r, ainesosa a, resepti_ainesosa i "
+                    "WHERE r.id = i.resepti_id AND a.id =i.ainesosa_id AND r.id = :recipe_id ;").params(recipe_id=recipe_id)
+
+        res = db.engine.execute(stmt)
+        response = []
+        for row in res:
+            response.append({"name":row[0], "amount":row[1]})
+
+        return response
     
 
 

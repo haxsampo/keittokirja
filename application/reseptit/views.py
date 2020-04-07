@@ -37,33 +37,41 @@ def reseptit_search_with_stuff():
 @login_required
 def reseptit_set_cooktime(resepti_id):
     ##Edit resepti with resepti_id
-    if request.method == "POST":
-        form = ReseptiForm(request.form)
+    form = ReseptiForm(request.form)
 
-        r = Resepti.query.get(resepti_id)   
+    r = Resepti.query.get(resepti_id)   
 
-        newCooktime = request.form.get("cooktime")
-        if newCooktime:
-            r.cooktime = newCooktime
-        else:
-            del form.cooktime
-            
-        newName = request.form.get("name")
-        if newName:
-            r.name = newName
-        else:
-            del form.name
-
-        if not form.validate():
-            print(form.errors)
-            return redirect(url_for("reseptit_index"))
-        
-        db.session().commit()
-        
-        return redirect(url_for("reseptit_index"))
-    ##Show resepti with resepti_id
+    newCooktime = request.form.get("cooktime")
+    if newCooktime:
+        r.cooktime = newCooktime
     else:
+        del form.cooktime
+        
+    newName = request.form.get("name")
+    if newName:
+        r.name = newName
+    else:
+        del form.name
+
+    if not form.validate():
+        print(form.errors)
         return redirect(url_for("reseptit_index"))
+    
+    db.session().commit()
+    
+    return redirect(url_for("reseptit_index"))
+    
+
+@app.route("/reseptit/show/<resepti_id>/")
+@login_required
+def show_recipe(resepti_id):
+    r = Resepti.query.get(resepti_id)
+    print("-------------------------------------------BEGIN TRANSMISSION-------------------------------------------")
+    print(r)
+    a = Ainesosa.find_ainesosat_for_recipe(resepti_id)
+    return render_template("reseptit/show.html", resepti= r, ainesosat = a)
+
+
 
 @app.route("/reseptit/", methods=["POST"])
 @login_required
@@ -74,7 +82,7 @@ def reseptit_create():
     if not form.validate():
         return render_template("reseptit/new.html", form = form)
 
-    #Lets remove empty forms from further processing
+    #Add only those forms with info to list
     aineListWithoutEmpties = []
     for aineEl in aineForm.aineet.data:
         elName = aineEl['name']
