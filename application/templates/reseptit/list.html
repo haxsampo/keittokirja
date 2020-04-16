@@ -14,15 +14,12 @@
                         <input type="submit" value="Change name"/>
                     </form>
                 </td>
-                
-            <td>{{ resepti.cooktime }}</td>
-            <td>
-                <form method="POST" action="{{ url_for('reseptit_set_cooktime', resepti_id=resepti.id) }}">
-                    <input type="text" name="cooktime"/>
-                    <input type="submit" value="Change cooktime"/>
-                </form>
-               
-            </td>  
+                <td>
+                   <a href="{{ url_for('reseptit_set_cooktime', resepti_id= resepti.id) }}">{{ resepti.name }}</a>
+                </td>
+                <td>
+                    <a href="{{ url_for('delete_resepti', resepti_id= resepti.id)}}">DELETE</a>
+                </td>
         </tr>
         {% endfor %}
     </table>

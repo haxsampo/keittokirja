@@ -15,6 +15,13 @@
 
             {% endfor %}
         </tr>
-    
+        <tr>
+            <h2>Ohjeet</h2>
+        </tr>
+        <ul>
+            {% for el in ohje %}
+            <li>{{ el }}</li>
+        </ul>
+        {% endfor %}
     </table>
 {% endblock %}

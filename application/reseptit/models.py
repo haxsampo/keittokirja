@@ -15,7 +15,7 @@ class Resepti_ainesosa(db.Model):
     resepti_id = db.Column(db.Integer, db.ForeignKey('resepti.id'), primary_key=True)
     ainesosa_id = db.Column(db.Integer, db.ForeignKey('ainesosa.id'), primary_key=True)
     amount = db.Column(db.String(32))
-    ainesosa = db.relationship("Ainesosa", back_populates="resepti")
+    ainesosa = db.relationship("Ainesosa", back_populates="resepti", cascade='all, delete-orphan', single_parent=True)
     resepti = db.relationship("Resepti", back_populates="ainesosa")
 
     #def __init__(self, amount):
@@ -38,7 +38,9 @@ class Resepti(Base):
     cooktime = db.Column(db.Integer, nullable=False)
     account_id = db.Column(db.Integer, db.ForeignKey('account.id'), nullable=False)
 
-    ainesosa = db.relationship('Resepti_ainesosa', back_populates='resepti')
+    ohje_ref = db.relationship('Ohje', uselist=False, back_populates="resepti_ref", cascade="all, delete-orphan")
+
+    ainesosa = db.relationship('Resepti_ainesosa', back_populates='resepti', cascade="all, delete-orphan", single_parent=True)
 
     def __init__(self, name, cooktime):
         self.name = name
@@ -55,7 +57,6 @@ class Resepti(Base):
             response.append({"name":row[0], "id":row[1]})
         
         return response
-
 
 
 class Ainesosa(Base):
@@ -76,6 +77,8 @@ class Ainesosa(Base):
             response.append({"name":row[0], "amount":row[1]})
 
         return response
+
+
     
 
 

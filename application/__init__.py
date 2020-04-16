@@ -20,6 +20,8 @@ from application.reseptit import views
 from application.auth import models
 from application.auth import views
 
+from application.ohje import models
+
 from application.misc.sqlhelp import startupInsertionContainer
 
 #user authentication
@@ -43,5 +45,6 @@ try:
     startupInsertionContainer.insert_test_accounts()
 except:
     pass
+
 
     
