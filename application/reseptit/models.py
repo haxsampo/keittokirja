@@ -15,7 +15,7 @@ class Resepti_ainesosa(db.Model):
     resepti_id = db.Column(db.Integer, db.ForeignKey('resepti.id'), primary_key=True)
     ainesosa_id = db.Column(db.Integer, db.ForeignKey('ainesosa.id'), primary_key=True)
     amount = db.Column(db.String(32))
-    ainesosa = db.relationship("Ainesosa", back_populates="resepti", cascade='all, delete-orphan', single_parent=True)
+    ainesosa = db.relationship("Ainesosa", back_populates="resepti")
     resepti = db.relationship("Resepti", back_populates="ainesosa")
 
     #def __init__(self, amount):
@@ -40,7 +40,7 @@ class Resepti(Base):
 
     ohje_ref = db.relationship('Ohje', uselist=False, back_populates="resepti_ref", cascade="all, delete-orphan")
 
-    ainesosa = db.relationship('Resepti_ainesosa', back_populates='resepti', cascade="all, delete-orphan", single_parent=True)
+    ainesosa = db.relationship('Resepti_ainesosa', back_populates='resepti', cascade='all')
 
     def __init__(self, name, cooktime):
         self.name = name
@@ -61,7 +61,7 @@ class Resepti(Base):
 
 class Ainesosa(Base):
     name = db.Column(db.String(144), nullable=False)
-    resepti = db.relationship('Resepti_ainesosa', back_populates='ainesosa')
+    resepti = db.relationship('Resepti_ainesosa', back_populates='ainesosa', cascade='delete, delete-orphan')
 
     def __init__(self, name):
         self.name = name
@@ -77,6 +77,14 @@ class Ainesosa(Base):
             response.append({"name":row[0], "amount":row[1]})
 
         return response
+    
+    @staticmethod
+    def clean_ainesosat():
+        stmt = text("DELETE FROM ainesosa WHERE ainesosa.id NOT IN "
+                "(SELECT resepti_ainesosa.ainesosa_id FROM resepti_ainesosa);")
+        db.engine.execute(stmt)
+
+        
 
 
     

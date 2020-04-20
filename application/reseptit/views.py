@@ -35,11 +35,10 @@ def reseptit_search_with_stuff():
 @app.route("/reseptit/del/<resepti_id>/")
 @login_required
 def delete_resepti(resepti_id):
-    print("TERVE DELEE_RESEPTI")
     poistettava = Resepti.query.get(resepti_id)
     db.session.delete(poistettava)
     db.session.commit()
-    print("COMMITKIN TOIMII JIPPIII")
+    Ainesosa.clean_ainesosat()
     return render_template("reseptit/list.html", reseptit=Resepti.query.all())
 
 @app.route("/reseptit/<resepti_id>/", methods=["POST", "GET", "DELETE"])

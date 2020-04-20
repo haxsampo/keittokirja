@@ -21,7 +21,10 @@ class Ohje(Base):
         for row in res:
             response.append({"rivi":row[0]})
 
-        pal = response[0]['rivi'].split("\r\n")
+        try:
+            pal = response[0]['rivi'].split("\r\n")
+        except:
+            pal = response[0]['rivi']
         #pal = response[0]['rivi']
         print(type(pal))
         print(pal)
