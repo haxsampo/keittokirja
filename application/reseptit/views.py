@@ -1,4 +1,4 @@
-from flask import render_template, request, url_for, redirect
+from flask import render_template, request, url_for, redirect, flash
 from flask_login import login_required, current_user
 
 from application import app, db
@@ -66,6 +66,9 @@ def reseptit_search_with_stuff():
 @app.route("/reseptit/del/<resepti_id>/")
 @login_required
 def delete_resepti(resepti_id):
+    if current_user.user_group != 0:
+        flash("Deleting is for admin users")
+        return render_template("index.html")
     poistettava = Resepti.query.get(resepti_id)
     db.session.delete(poistettava)
     db.session.commit()

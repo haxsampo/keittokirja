@@ -18,8 +18,8 @@ class requestContainer():
 class startupInsertionContainer():
     @staticmethod
     def insert_test_accounts():
-        stmt = text("INSERT INTO account (username, name, password) "
-                    "VALUES ('', '', '');")
+        stmt = text("INSERT INTO account (username, name, password, user_group) "
+                    "VALUES ('', '', '', 0);")
 
         db.engine.execute(stmt)
 
