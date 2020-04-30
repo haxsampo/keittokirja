@@ -2,15 +2,12 @@ from flask import render_template, request, url_for, redirect
 from flask_login import login_required, current_user
 
 from application import app, db
-from application.reseptit.forms import ReseptiForm
-from application.reseptit.forms import SearchForm
-from application.reseptit.forms import NewReseptiForm
-from application.reseptit.forms import EditForm
+from application.reseptit.forms import ReseptiForm, SearchForm, NewReseptiForm, EditForm
 from application.reseptit.models import Resepti
 from application.misc.sqlhelp import requestContainer
-from application.reseptit.models import Ainesosa
-from application.reseptit.models import Resepti_ainesosa
 from application.ohje.models import Ohje
+from application.ainesosat.models import Ainesosa
+from application.resepti_ainesosat.models import Resepti_ainesosa
 
 @app.route("/reseptit", methods=["GET"])
 def reseptit_index():

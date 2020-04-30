@@ -22,6 +22,10 @@ from application.auth import views
 
 from application.ohje import models
 
+from application.ainesosat import models
+
+from application.resepti_ainesosat import models
+
 from application.misc.sqlhelp import startupInsertionContainer
 
 #user authentication
