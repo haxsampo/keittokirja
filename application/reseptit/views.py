@@ -14,7 +14,8 @@ from application.ohje.models import Ohje
 
 @app.route("/reseptit", methods=["GET"])
 def reseptit_index():
-    return render_template("reseptit/list.html", reseptit = Resepti.query.all())
+    ainesosaCount = Resepti.find_resepti_ainesosa_count()
+    return render_template("reseptit/list.html", reseptit = Resepti.query.all(), ainesosaCount = ainesosaCount)
 
 @app.route("/reseptit/new/")
 @login_required
@@ -72,7 +73,8 @@ def delete_resepti(resepti_id):
     db.session.delete(poistettava)
     db.session.commit()
     Ainesosa.clean_ainesosat()
-    return render_template("reseptit/list.html", reseptit=Resepti.query.all())
+    ainesosaCount = Resepti.find_resepti_ainesosa_count()
+    return render_template("reseptit/list.html", reseptit=Resepti.query.all(), ainesosaCount = ainesosaCount)
 
 @app.route("/reseptit/<resepti_id>/", methods=["POST", "GET", "DELETE"])
 @login_required

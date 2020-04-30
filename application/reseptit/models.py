@@ -77,6 +77,16 @@ class Resepti(Base):
             response.append({"name":row[0], "id":row[1]})
         
         return response
+    
+    @staticmethod
+    def find_resepti_ainesosa_count():
+        stmt = text("SELECT resepti.name, COUNT(resepti_ainesosa.resepti_id) FROM resepti LEFT JOIN resepti_ainesosa ON resepti_ainesosa.resepti_id = resepti.id GROUP BY resepti.name;")
+        res = db.engine.execute(stmt)
+        response = []
+        for row in res:
+            response.append({"name":row[0], "amount":row[1]})
+        print(response)
+        return response
 
 
 class Ainesosa(Base):

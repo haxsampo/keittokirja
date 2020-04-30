@@ -3,6 +3,16 @@
 {% block body %}
     <table>
         <tr>
+            <div>
+                Reseptit ja kunkin reseptin ainesosien määrä
+            </div>
+            {% for el in ainesosaCount %}
+            <div>
+                {{ el.name }} {{ el.amount }}
+            </div>
+            {% endfor %}
+        </tr>
+        <tr>
             <th>Resepti</th>
         </tr>
         {% for resepti in reseptit %}
