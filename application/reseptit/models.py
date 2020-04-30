@@ -83,6 +83,8 @@ class Ainesosa(Base):
         stmt = text("DELETE FROM ainesosa WHERE ainesosa.id NOT IN "
                 "(SELECT resepti_ainesosa.ainesosa_id FROM resepti_ainesosa);")
         db.engine.execute(stmt)
+    
+
 
         
 

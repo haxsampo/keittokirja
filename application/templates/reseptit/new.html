@@ -1,18 +1,24 @@
 {% extends "layout.html" %}
 
 {% block body %}
+<head>
+    <script src= 
+        "https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"> 
+    </script> 
+</head>
+
 <form method="POST" action="{{ url_for('reseptit_create') }}">   
     <table>
         <tr>
             <td>
-                {{ form.name.label }}
+                {{ form.resepti.nimi.label }}
             </td>
             <td>
-                {{ form.name }}
+                {{ form.resepti.nimi }}
             </td>
             <td>
                 <ul>
-                    {% for error in form.name.errors %}
+                    {% for error in form.resepti.nimi.errors %}
                     <li>{{ error }}</li>
                     {% endfor %}
                 </ul>
@@ -20,14 +26,14 @@
         </tr>
         <tr>
             <td>
-                {{ form.cooktime.label }} minuuteissa
+                {{ form.resepti.cooktime.label }} minuuteissa
             </td>
             <td>
-                {{ form.cooktime }}
+                {{ form.resepti.cooktime }}
             </td>
             <td>
                 <ul>
-                    {% for error in form.cooktime.errors %}
+                    {% for error in form.resepti.cooktime.errors %}
                     <li>{{ error }}</li>
                     {% endfor %}
                 </ul>
@@ -35,28 +41,51 @@
         </tr>
         <tr>
             <td>
-                {{ form.ohje.label }}
+                {{ form.resepti.ohje.label }}
             </td>
             <td>
-                {{ form.ohje }}
+                {{ form.resepti.ohje }}
             </td>
             <td>
                 <ul>
-                    {% for error in form.ohje.errors %}
+                    {% for error in form.resepti.ohje.errors %}
                     <li>{{ errors }}</li>
                     {% endfor %}
                 </ul>
             </td>
         </tr>
         <tr>
-            <div class="form-group input-group">
-                {% for el in aineet %}
+            <div id="aineet_div">                
+                {% for el in form.aineet %}
+                    <tr>
+                        <td>
+                            {{ el.label }}
+                        </td>
+                        <td>
+                            {{ el() }}
+                        </td>
+                    </tr>
+                {% endfor %}             
+            </div>    
+        </tr>
+        {% if form.aineet.errors %}
+        <tr>
+            <ul class=errors>
+                {% for error in field.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        </tr>
+        {% endif %}
+        <!-- <tr>
+            <div id="hidden_aineet" style = "display:none">
+                {% for el in addAineet %}
                     {% for field in el %}
                         {{ field() }}
                     {% endfor %}
                 {% endfor %}
-            </div>            
-        </tr>
+            </div> 
+        </tr> -->               
         <tr>
             <td colspan="2">
                 <input type="submit" value="New recipe"/>
@@ -64,4 +93,6 @@
         </tr>
     </table>   
 </form>
-{% endblock %}
+<!-- <script type="text/javascript" src="{{ url_for('static', filename='js_stuff.js') }}"></script>
+<button id="btn_showmore" onclick="showAddAineet()" value="run external javascript">Show more ainesosaforms</button>
+ -->{% endblock %}

@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<table>
+    <tr>
+        <td>{{ form.name.label }}</td>
+        <td>
+            {{ form.name }}
+        </td>
+        <td>
+            <ul>
+                {% for error in form.name.errors %}
+                <li>{{error}}</li>
+                {% endfor %}
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            {{ form.cooktime.label }} minuuteissa
+        </td>
+        <td>
+            {{ form.cooktime }}
+        </td>
+        <td>
+            <ul>
+                {% for error in form.cooktime.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            {{ form.ohje.label }}
+        </td>
+        <td>
+            {{ form.ohje }}
+        </td>
+        <td>
+            <ul>
+                {% for error in form.ohje.errors %}
+                <li>{{ errors }}</li>
+                {% endfor %}
+            </ul>
+        </td>
+    </tr>
+</table>
+
+{% endblock %}
