@@ -14,7 +14,7 @@ class AinesosaForm(FlaskForm):
         csrf = False
 
 class EditAinesosaForm(FlaskForm):
-    name0 = StringField("Ainesosa name")
+    name0 = StringField("Ainesosa name", [validators.Length(max=40)])
     amount0 = IntegerField("Ainesosa amount")
     name1 = StringField("Ainesosa name")
     amount1 = IntegerField("Ainesosa amount", validators=(validators.Optional(),))
@@ -25,9 +25,9 @@ class EditAinesosaForm(FlaskForm):
         csrf = False
 
 class ReseptiForm(FlaskForm):
-    nimi = StringField("Resepti name", [validators.Length(min=2)])
-    cooktime = IntegerField("Resepti cooktime")
-    ohje = TextAreaField("Reseptin ohjeet", [validators.Length(min=2)])
+    nimi = StringField("Resepti name", [validators.Length(min=2, max=30)])
+    cooktime = IntegerField("Resepti cooktime", [validators.NumberRange(min=1, max=2800)])
+    ohje = TextAreaField("Reseptin ohjeet", [validators.Length(min=2, max=500)])
 
     class Meta:
         csrf = False

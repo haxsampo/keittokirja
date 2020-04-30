@@ -14,3 +14,10 @@ I want to be able to pull information directly from websites so that the informa
 As an user I want to be able to delete old recipes that I'm not using anymore.
 
 As an user I want to be able to modify my recipes later on so I can make make my own notes to the process, or add alterations.
+
+-------------------------------------------------------------
+Käyttäjänä voin lisätä, muokata reseptejä.
+
+Käyttäjänä haluan nähdä kaikki tallennetut reseptit
+
+Adminina voin lisätä, poistaa ja muokata reseptjä. 

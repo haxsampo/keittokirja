@@ -168,10 +168,12 @@ def show_recipe(resepti_id):
 def reseptit_create():
     form = NewReseptiForm(request.form)
    
-    #print(form.resepti.ohje.data)
     if not form.resepti.validate(form):
+        print(form.resepti.errors)
         return render_template("reseptit/new.html", form = form)
     if not form.aineet.validate(form):
+        print(form.aineet.errors.items())
+        print(form.aineet.errors['amount'][0])
         return render_template("reseptit/new.html", form = form)
 
     #Add only those aine forms with info to list
