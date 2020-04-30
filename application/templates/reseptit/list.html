@@ -15,10 +15,13 @@
                     </form>
                 </td>
                 <td>
-                   <a href="{{ url_for('reseptit_set_cooktime', resepti_id= resepti.id) }}">{{ resepti.name }}</a>
+                   <a href="{{ url_for('reseptit_set_cooktime', resepti_id= resepti.id) }}">Katso reseptiä {{ resepti.name }}</a>
                 </td>
                 <td>
-                    <a href="{{ url_for('delete_resepti', resepti_id= resepti.id)}}">DELETE</a>
+                    <a href="{{ url_for('delete_resepti', resepti_id= resepti.id)}}"> Delete</a>
+                </td>
+                <td>
+                    <a href="{{ url_for('resepti_edit', resepti_id= resepti.id) }}">  Edit</a>
                 </td>
         </tr>
         {% endfor %}

@@ -18,8 +18,6 @@ class Resepti_ainesosa(db.Model):
     ainesosa = db.relationship("Ainesosa", back_populates="resepti")
     resepti = db.relationship("Resepti", back_populates="ainesosa")
 
-    #def __init__(self, amount):
-    #    self.amount = amount
 
     @staticmethod
     def add_ref_to_resepti_ainesosa(resepti_id, ainesosa_id, amount):
@@ -31,6 +29,28 @@ class Resepti_ainesosa(db.Model):
                     "VALUES (:resid, :ainid, :amountStr);").params(resid=resid, ainid=ainid, amountStr=amountStr)
 
         db.engine.execute(stmt)
+
+    def delete_non_relevant_resepti_ainesosa(resepti_id, ainesosa_ids):
+        resid = str(resepti_id)
+        if len(ainesosa_ids) == 0:
+            stmt = text("DELETE FROM resepti_ainesosa WHERE resepti_id = :resid;").params(resid=resid)
+            db.engine.execute(stmt)
+        elif len(ainesosa_ids) == 1:
+            ainid = str(ainesosa_ids[0])
+            stmt = text("DELETE FROM resepti_ainesosa WHERE resepti_id = :resid AND NOT ainesosa_id = :ainid;").params(resid=resid, ainid=ainid)
+            db.engine.execute(stmt)
+        elif len(ainesosa_ids) == 2:
+            ainid0 = str(ainesosa_ids[0])
+            ainid1 = str(ainesosa_ids[1])
+            stmt = text("DELETE FROM resepti_ainesosa WHERE resepti_id = :resid AND NOT ainesosa_id = :ainid0 AND NOT ainesosa_id =:ainid1;").params(resid=resid, ainid0=ainid0, ainid1=ainid1)
+            db.engine.execute(stmt)
+        elif len(ainesosa_ids) == 3:
+            ainid0 = str(ainesosa_ids[0])
+            ainid1 = str(ainesosa_ids[1])
+            ainid2 = str(ainesosa_ids[2])
+            stmt = text("DELETE FROM resepti_ainesosa WHERE resepti_id = :resid AND NOT ainesosa_id = :ainid0 AND NOT ainesosa_id =:ainid1 AND NOT ainesosa_id = :ainid2;").params(resid=resid, ainid0=ainid0, ainid1=ainid1, ainid2=ainid2)
+            db.engine.execute(stmt)
+    
 
 
 class Resepti(Base):
@@ -83,6 +103,7 @@ class Ainesosa(Base):
         stmt = text("DELETE FROM ainesosa WHERE ainesosa.id NOT IN "
                 "(SELECT resepti_ainesosa.ainesosa_id FROM resepti_ainesosa);")
         db.engine.execute(stmt)
+ 
     
 
 

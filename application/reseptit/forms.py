@@ -13,6 +13,17 @@ class AinesosaForm(FlaskForm):
     class Meta:
         csrf = False
 
+class EditAinesosaForm(FlaskForm):
+    name0 = StringField("Ainesosa name")
+    amount0 = IntegerField("Ainesosa amount")
+    name1 = StringField("Ainesosa name")
+    amount1 = IntegerField("Ainesosa amount", validators=(validators.Optional(),))
+    name2 = StringField("Ainesosa name")
+    amount2 = IntegerField("Ainesosa amount", validators=(validators.Optional(),))
+
+    class Meta:
+        csrf = False
+
 class ReseptiForm(FlaskForm):
     nimi = StringField("Resepti name", [validators.Length(min=2)])
     cooktime = IntegerField("Resepti cooktime")
@@ -35,9 +46,20 @@ class SearchForm(FlaskForm):
     class Meta:
         csrf = False
 
-class AineetList(FlaskForm):
-    aineet = FieldList(FormField(AinesosaForm), min_entries=3, max_entries=5)
-    
+class EditForm(FlaskForm):
+    resepti = FormField(ReseptiForm)
+    aineet = FormField(EditAinesosaForm)
+
     class Meta:
         csrf = False
 
+class EditAinesosaForm(FlaskForm):
+    name0 = StringField("Ainesosa name")
+    amount0 = IntegerField("Ainesosa amount")
+    name1 = StringField("Ainesosa name")
+    amount1 = IntegerField("Ainesosa amount", validators=(validators.Optional(),))
+    name2 = StringField("Ainesosa name")
+    amount2 = IntegerField("Ainesosa amount", validators=(validators.Optional(),))
+
+    class Meta:
+        csrf = False

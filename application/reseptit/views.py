@@ -5,6 +5,7 @@ from application import app, db
 from application.reseptit.forms import ReseptiForm
 from application.reseptit.forms import SearchForm
 from application.reseptit.forms import NewReseptiForm
+from application.reseptit.forms import EditForm
 from application.reseptit.models import Resepti
 from application.misc.sqlhelp import requestContainer
 from application.reseptit.models import Ainesosa
@@ -23,15 +24,33 @@ def reseptit_form():
 @app.route("/reseptit/edit/<resepti_id>/")
 @login_required
 def resepti_edit(resepti_id):
-    form = NewReseptiForm()
+    form = EditForm()
     r = Resepti.query.get(resepti_id)
-    form.resepti.name.data = r.name
+    form.resepti.nimi.data = r.name
     form.resepti.cooktime.data = r.cooktime
     o = Ohje.query.filter_by(resepti_id=resepti_id).first()
-    form.ohje.data = o.ohjeet
+    form.resepti.ohje.data = o.ohjeet
+
     a = Ainesosa.find_ainesosat_for_recipe(resepti_id)
-    ##Lisää ainesosapaskat tänne
-    return render_template("reseptit/edit.html", form = form)
+    print(a)
+    try:
+        form.aineet.name0.data = a[0]['name']
+        form.aineet.amount0.data = a[0]['amount']
+    except Exception as e:
+        print(e)
+        pass 
+    try:
+        form.aineet.name1.data = a[1]['name']
+        form.aineet.amount1.data = a[1]['amount']
+    except:
+        print("virhe tokassa")
+        pass
+    try:
+        form.aineet.name2.data = a[2]['name']
+        form.aineet.amount2.data = a[2]['amount']
+    except:
+        pass
+    return render_template("reseptit/edit.html", form = form, resepti_id = resepti_id)
 
 
 @app.route("/search/")
@@ -60,27 +79,69 @@ def delete_resepti(resepti_id):
 def reseptit_set_cooktime(resepti_id):
     if  request.method == 'POST':
         ##Edit resepti with resepti_id
-        form = ReseptiForm(request.form)
+        form = EditForm(request.form)
+
+        if not form.resepti.validate(form):
+            return render_template("reseptit/edit.html", form = form)
+        if not form.aineet.validate(form):
+            return render_template("reseptit/edit.html", form = form)
 
         r = Resepti.query.get(resepti_id)   
 
-        newCooktime = request.form.get("cooktime")
+        newCooktime = form.resepti.cooktime.data
         if newCooktime:
             r.cooktime = newCooktime
-        else:
-            del form.cooktime
             
-        newName = request.form.get("name")
+        newName = form.resepti.nimi.data
         if newName:
             r.name = newName
-        else:
-            del form.name
 
-        if not form.validate():
-            print(form.errors)
-            return redirect(url_for("reseptit_index"))
-        
+        o = Ohje.query.filter_by(resepti_id = resepti_id).first()
+        newOhje = form.resepti.ohje.data
+        if newOhje:
+            o.ohjeet = newOhje
+
+        #Luodaan lista ainesosaformeien sisällöistä
+        aineList = []
+        if form.aineet.name0.data:
+            aineList.append({'aine':form.aineet.name0.data, 'amount' : form.aineet.amount0.data})
+        if form.aineet.name1.data:
+            aineList.append({'aine': form.aineet.name1.data, 'amount': form.aineet.amount1.data})
+        if form.aineet.name2.data:
+            aineList.append({'aine': form.aineet.name2.data, 'amount': form.aineet.amount2.data})
+
+        #Tehdään lista käsiteltäville resepti_ainesosa.id:lle myöhempää tietokannan siivoamista varten
+        relevantAinesosaId = []
+        #Lista uusille ainesosille, jos niitä ei ole vielä olemassa
+        #Nämä saavat id:t vasta commitin jälkeen, joten näille voidaan luoda resepti_ainesosa-linkit vasta tämän jälkeen
+        newAinesosaList = []
+        for aine in aineList:
+            aineExists = Ainesosa.query.filter_by(name=aine['aine']).first()
+            if aineExists:#ainesosa on olemassa
+                relevantAinesosaId.append(aineExists.id)
+                res_aine = Resepti_ainesosa.query.filter_by(resepti_id=resepti_id, ainesosa_id=aineExists.id).first()
+                if res_aine: #resepti_ainesosa on olemassa, update amount
+                    print("res_aine: ", res_aine)
+                    print("res_aine amount: ", aine['amount'])
+                    res_aine.amount = aine['amount']
+                else: #resepti_ainesosa ei ole olemassa, create
+                    Resepti_ainesosa.add_ref_to_resepti_ainesosa(resepti_id, aineExists.id, aine['amount'])
+            else: #ainesosa ei ole olemassa, lisätään sessioon ja listalle, niin voidaan myöhemmin tehdä resepti_ainesosat id:iden muodostuttua committissa
+                newAinesosa = Ainesosa(aine['aine'])
+                newAinesosaList.append({'newAines':newAinesosa, 'amount':aine['amount']})
+                db.session().add(newAinesosa)
+        print("newAinesosaList: ",newAinesosaList)
+        print("relevantAinesosaId: ", relevantAinesosaId)
         db.session().commit()
+
+        #luodaan resepti_ainesosat juuri luoduille ainesosille
+        for el in newAinesosaList:
+            relevantAinesosaId.append(el['newAines'].id)
+            Resepti_ainesosa.add_ref_to_resepti_ainesosa(resepti_id, el['newAines'].id, el['amount'])
+
+        #siistitään tietokannasta sellaiset rivit jotka ovat jääneet ilman linkkejä tämän funktion käpistelyn seurauksena
+        Resepti_ainesosa.delete_non_relevant_resepti_ainesosa(resepti_id, relevantAinesosaId)
+        Ainesosa.clean_ainesosat()
         
         return redirect(url_for("reseptit_index"))
 

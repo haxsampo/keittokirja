@@ -1,15 +1,16 @@
 {% extends "layout.html" %}
 
 {% block body %}
+<form method="POST" action="{{ url_for('reseptit_set_cooktime', resepti_id=resepti_id) }}">
 <table>
     <tr>
-        <td>{{ form.name.label }}</td>
+        <td>{{ form.resepti.nimi.label }}</td>
         <td>
-            {{ form.name }}
+            {{ form.resepti.nimi }}
         </td>
         <td>
             <ul>
-                {% for error in form.name.errors %}
+                {% for error in form.resepti.name.errors %}
                 <li>{{error}}</li>
                 {% endfor %}
             </ul>
@@ -17,14 +18,14 @@
     </tr>
     <tr>
         <td>
-            {{ form.cooktime.label }} minuuteissa
+            {{ form.resepti.cooktime.label }} minuuteissa
         </td>
         <td>
-            {{ form.cooktime }}
+            {{ form.resepti.cooktime }}
         </td>
         <td>
             <ul>
-                {% for error in form.cooktime.errors %}
+                {% for error in form.resepti.cooktime.errors %}
                 <li>{{ error }}</li>
                 {% endfor %}
             </ul>
@@ -32,19 +33,51 @@
     </tr>
     <tr>
         <td>
-            {{ form.ohje.label }}
+            {{ form.resepti.ohje.label }}
         </td>
         <td>
-            {{ form.ohje }}
+            {{ form.resepti.ohje }}
         </td>
         <td>
             <ul>
-                {% for error in form.ohje.errors %}
+                {% for error in form.resepti.ohje.errors %}
                 <li>{{ errors }}</li>
                 {% endfor %}
             </ul>
         </td>
     </tr>
+    <tr>
+        <td>
+            Ainesosat
+        </td>
+        <div id ="aineet_div">
+            {% for el in form.aineet %}
+                <tr>
+                    <td>
+                        {{ el.label }}
+                    </td>
+                    <td>
+                        {{ el() }}
+                    </td>
+                </tr>
+            {% endfor %}
+        </div>
+    </tr>
+    {% if form.aineet.errors %}
+    <tr>
+        <ul class = errors>
+            {% for error in form.aineet.errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    </tr>
+    {% endif %}
+    <tr>
+        <td colspan="2">
+            <input type="submit" value="Edit recipe"/>
+        </td>
+    </tr>
 </table>
+</form>
 
 {% endblock %}
